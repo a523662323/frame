@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/frame.iml" filepath="$PROJECT_DIR$/.idea/frame.iml" />
+      <module fileurl="file://D:\wp\gitworkspace\frame\.idea\frame.iml" filepath="D:\wp\gitworkspace\frame\.idea\frame.iml" />
     </modules>
   </component>
 </project>
