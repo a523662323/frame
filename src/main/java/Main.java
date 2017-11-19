@@ -29,67 +29,59 @@ public class Main {
 //        if (scan.hasNextInt()) {
 //            endIndex = scan.nextInt();
 //        }
-//        int[][] paths = new int[numbers][numbers];
-        int[][] paths = {{0,10,3,-1,-1},{-1,0,1,2,-1},{-1,4,0,8,2},{-1,-1,-1,0,7},{-1,-1,-1,9,0}};
+//        int[][] pathsMap = new int[numbers][numbers];
+        int[][] pathsMap = {{0,10,3,-1,-1},{-1,0,1,2,-1},{-1,4,0,8,2},{-1,-1,-1,0,7},{-1,-1,-1,9,0}};
+        int[][] shortestPath = {{0,-1,-1,-1,-1},{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1}};
 
-        List<Integer> V = new ArrayList<Integer>();
-        List<Integer> S = new ArrayList<Integer>();
+
+        List<Integer> sortedSeq = new ArrayList<Integer>();
+        List<Integer> leftSeq = new ArrayList<Integer>();
         List<Integer> distances = new ArrayList<Integer>();
-        for (int i = 0; i < paths[statIndex].length; i++) {
-            distances.add(paths[statIndex][i]);
+        for (int i = 0; i < pathsMap[statIndex].length; i++) {
+//            distances.add(pathsMap[statIndex][i]);
+            distances.add(-1);
         }
+        distances.set(0,0);
         for (int i = 0; i < numbers; i++) {
-            if (i == statIndex)
-                continue;
-            S.add(i);
+            leftSeq.add(i);
         }
-        int currentCity = statIndex;
-        V.add(currentCity);
 
         //get min index;
-        while (S.size() > 0) {
-            int temp = distances.get(S.get(0));
-            int index = S.get(0);
+        while (leftSeq.size() > 0) {
+            //get min from distances
+            int temp = distances.get(leftSeq.get(0));
+            int index = leftSeq.get(0);
             int k =0;
-            for (int i = 0; i < S.size(); i++) {
-                if (distances.get(S.get(i))>0&&distances.get(S.get(i)) < temp) {
-                    temp = distances.get(S.get(i));
-                    index = S.get(i);
+            for (int i = 0; i < leftSeq.size(); i++) {
+                if (distances.get(leftSeq.get(i))>=0&&distances.get(leftSeq.get(i)) < temp) {
+                    temp = distances.get(leftSeq.get(i));
+                    index = leftSeq.get(i);
                     k=i;
                 }
             }
-            for (int i = 0; i < paths[index].length; i++) {
+
+            //update distances
+            for (int i = 0; i < pathsMap[index].length; i++) {
                 if (i == index)
                     continue;
-                int i1 = paths[index][i] + distances.get(index);
+                int i1 = pathsMap[index][i] + distances.get(index);
                 Integer integer = distances.get(i);
-                if (paths[index][i] > 0 && ((i1 < integer)||integer<0)) {
+                //find beside nodes
+                if (pathsMap[index][i] > 0 && ((i1 < integer)||integer<0)) {
                     distances.set(i, i1);
+                    //i=index+ pathsMap[index][i] add i point to shortest path maps
+                    for (int j = 0; j < shortestPath[index].length; j++) {
+                        if(shortestPath[index][j]==-1){
+                            shortestPath[i][j]=i;
+                            break;
+                        }
+                        shortestPath[i][j]=shortestPath[index][j];
+                    }
                 }
             }
-            V.add(index);
-            S.remove(k);
+            sortedSeq.add(index);
+            leftSeq.remove(k);
         }
-//        for (int i = 0; i < paths[statIndex].length; i++) {
-//            distances[i]=paths[statIndex][i];
-//        }
-//        int currentCity=statIndex;
-//        V[currentCity] =++count;
-//        S[currentCity]=count;
-//        while (starts.size()<numbers){
-////            paths[statIndex]
-//            int temp=paths[currentCity][0];
-//            int index=0;
-//            for (int i = 0; i < paths[currentCity].length; i++) {
-////                if (paths[currentCity][i]>=0&&)
-//                if (V[i]==0&&currentCity!=i&&paths[currentCity][i]<temp){
-//                    temp = paths[currentCity][i];
-//                    index=i;
-//                }
-//                V[index]=++count;
-//                S[index] = count;
-////                for() points connected with index
-//            }
     }
 
     private static void A1001() {
