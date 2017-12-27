@@ -11,6 +11,8 @@ public class Main {
     }
 
     private static void A1002() {
+
+        //test git
         Scanner scan = new Scanner(System.in);
         int numbers = 5;
         int roadnumbers = 0;
