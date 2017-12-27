@@ -37,6 +37,8 @@ public class Main {
         List<Integer> sortedSeq = new ArrayList<Integer>();
         List<Integer> leftSeq = new ArrayList<Integer>();
         List<Integer> distances = new ArrayList<Integer>();
+        List<Integer> distancesTemp = new ArrayList<Integer>();
+
         for (int i = 0; i < pathsMap[statIndex].length; i++) {
 //            distances.add(pathsMap[statIndex][i]);
             distances.add(-1);
@@ -203,4 +205,83 @@ public class Main {
         out.println(count);
     }
 
+
+
+    private static void shortestPath(int num) {
+        Scanner scan = new Scanner(System.in);
+        int numbers = 5;
+        int roadnumbers = 0;
+        int statIndex = 0;
+        int endIndex = 0;
+        int count = 0;
+//        if (scan.hasNextInt()) {
+//            numbers = scan.nextInt();
+//        }
+//        if (scan.hasNextInt()) {
+//            roadnumbers = scan.nextInt();
+//        }
+//        if (scan.hasNextInt()) {
+//            statIndex = scan.nextInt();
+//        }
+//        if (scan.hasNextInt()) {
+//            endIndex = scan.nextInt();
+//        }
+//        int[][] pathsMap = new int[numbers][numbers];
+        int[][] pathsMap = {{0,10,3,-1,-1},{-1,0,1,2,-1},{-1,4,0,8,2},{-1,-1,-1,0,7},{-1,-1,-1,9,0}};
+        int[][] shortestPath = {{0,-1,-1,-1,-1},{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1},{-1,-1,-1,-1,-1}};
+
+
+        List<Integer> sortedSeq = new ArrayList<Integer>();
+        List<Integer> leftSeq = new ArrayList<Integer>();
+        List<Integer> distances = new ArrayList<Integer>();
+        List<Integer> distancesTemp = new ArrayList<Integer>();
+
+        for (int i = 0; i < pathsMap[statIndex].length; i++) {
+//            distances.add(pathsMap[statIndex][i]);
+            distances.add(-1);
+        }
+        distances.set(0,0);
+        for (int i = 0; i < numbers; i++) {
+            leftSeq.add(i);
+        }
+
+        //get min index;
+        if (leftSeq.size() > 0) {
+            //get min from distances
+            int temp = distances.get(leftSeq.get(0));
+            int index = leftSeq.get(0);
+            int k =0;
+            for (int i = 0; i < leftSeq.size(); i++) {
+                if (distances.get(leftSeq.get(i))>=0&&distances.get(leftSeq.get(i)) < temp) {
+                    temp = distances.get(leftSeq.get(i));
+                    index = leftSeq.get(i);
+                    k=i;
+                }
+            }
+
+            //update distances
+            for (int i = 0; i < pathsMap[index].length; i++) {
+                if (i == index)
+                    continue;
+                int i1 = pathsMap[index][i] + distances.get(index);
+                Integer integer = distances.get(i);
+                //find beside nodes
+                if (pathsMap[index][i] > 0 && ((i1 < integer)||integer<0)) {
+                    distances.set(i, i1);
+                    //i=index+ pathsMap[index][i] add i point to shortest path maps
+                    for (int j = 0; j < shortestPath[index].length; j++) {
+                        if(shortestPath[index][j]==-1){
+                            shortestPath[i][j]=i;
+                            break;
+                        }
+                        shortestPath[i][j]=shortestPath[index][j];
+                    }
+                }
+            }
+            sortedSeq.add(index);
+            leftSeq.remove(k);
+
+
+        }
+    }
 }
