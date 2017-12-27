@@ -10,6 +10,48 @@ public class Main {
         A1002();
     }
 
+    private static void shortestpath(){
+        int[][] pathsMap = {{0,10,3,-1,-1},{-1,0,1,2,-1},{-1,4,0,8,2},{-1,-1,-1,0,7},{-1,-1,-1,9,0}};
+        boolean[] visited={false,false,false,false,false};
+        int num=5;
+        int[] distances={0,-1,-1,-1,-1};
+
+        while (num>0){
+            int index=0;
+            int temp=0;
+            for (int i = 0; i < visited.length; i++) {
+                if(!visited[i]){
+                    index=i;
+                    temp=distances[i];
+                    break;
+                }
+            }
+            //get smallest
+            for (int j = 0; j < distances.length; j++) {
+                if (!visited[j]&&distances[j]<temp){
+                    index=j;
+                    temp=distances[j];
+                }
+            }
+
+            //update distances
+            for (int i = 0; i < pathsMap[index].length; i++) {
+                if(pathsMap[index][i]>0&&!visited[i]){
+                    if((distances[index]+pathsMap[index][i])<distances[i]){
+                        distances[i]=distances[index]+pathsMap[index][i];
+                    }
+                }
+            }
+
+            //remove index
+            visited[index]=true;
+            num--;
+
+        }
+
+
+    }
+
     private static void A1002() {
 
         //test git
