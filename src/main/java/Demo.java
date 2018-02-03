@@ -1,5 +1,3 @@
-package main.java;
-
 import static java.lang.System.out;
 
 public class Demo {
