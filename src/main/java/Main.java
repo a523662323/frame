@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.System.in;
 import static java.lang.System.out;
 
 public class Main {
@@ -10,12 +9,80 @@ public class Main {
         A1002();
     }
 
-    private static void shortestpath(){
-        int[][] pathsMap = {{0,10,3,-1,-1},{-1,0,1,2,-1},{-1,4,0,8,2},{-1,-1,-1,0,7},{-1,-1,-1,9,0}};
-        boolean[] visited={false,false,false,false,false};
-        int num=5;
-        int[] distances={0,-1,-1,-1,-1};
+    public static int[] getNextInt(int num){
+        int index = 0;
+        int[] strs = new int[num];
+        Scanner scan = new Scanner(System.in);
+        for (int i = 0; i < num; i++) {
+            if (scan.hasNextInt()){
+                strs[index++] = scan.nextInt();
+            }
+        }
+        return strs;
+    }
+    public static int getNextInt() {
+        int next = 0;
+        Scanner scan = new Scanner(System.in);
+        if (scan.hasNextInt()) {
+            next = scan.nextInt();
+        }
+        return next;
+    }
 
+    public static String[] getNextStrings(int num) {
+        int index = 0;
+        String[] strs = new String[num];
+        Scanner scan = new Scanner(System.in);
+        for (int i = 0; i < num; i++) {
+            if (scan.hasNext()){
+                strs[index++] = scan.next();
+            }
+        }
+        return strs;
+    }
+    public static String getNext() {
+        String next = "";
+        Scanner scan = new Scanner(System.in);
+        if (scan.hasNext()) {
+            next = scan.next();
+        }
+        return next;
+    }
+
+    private static void A1002(){
+        int[] firstline=getNextInt(4);
+        int N=firstline[0];
+        int M=firstline[1];
+        int res=firstline[2];
+        int des=firstline[3];
+        int[] persons=getNextInt(N);
+        int[][] pathsMap=new int[N][N];
+        for (int i = 0; i < pathsMap.length; i++) {
+            for (int j = 0; j < pathsMap[i].length; j++) {
+                if (i==j)
+                    continue;
+                pathsMap[i][j]=-1;
+            }
+        }
+        for (int i = 0; i < M; i++) {
+            int[] nextInt = getNextInt(3);
+            pathsMap[nextInt[0]][nextInt[1]]=nextInt[2];
+            pathsMap[nextInt[1]][nextInt[0]]=nextInt[2];
+        }
+        boolean[] visited={false,false,false,false,false,false};
+        int num=N;
+        int[] distances=new int[N];
+        //how many shortestpath
+        int[] ways=new int[N];
+        //max people get
+        int[] total=new int[N];
+        for (int i = 0; i < N; i++) {
+            if (i==res)
+                continue;
+            distances[i]=-1;
+        }
+        ways[res]=1;
+        total[res]=1;
         while (num>0){
             int index=0;
             int temp=0;
@@ -28,7 +95,7 @@ public class Main {
             }
             //get smallest
             for (int j = 0; j < distances.length; j++) {
-                if (!visited[j]&&distances[j]<temp){
+                if (!visited[j]&&distances[j]>=0&&distances[j]<temp){
                     index=j;
                     temp=distances[j];
                 }
@@ -37,8 +104,16 @@ public class Main {
             //update distances
             for (int i = 0; i < pathsMap[index].length; i++) {
                 if(pathsMap[index][i]>0&&!visited[i]){
-                    if((distances[index]+pathsMap[index][i])<distances[i]){
+                    if((distances[index]+pathsMap[index][i])<distances[i]||distances[i]<0){
                         distances[i]=distances[index]+pathsMap[index][i];
+                        ways[i]=ways[index];
+                        total[i]=total[index]+persons[i];
+                    }else if((distances[index]+pathsMap[index][i])==distances[i]){
+                        ways[i]=ways[i]+1;
+                        if(total[i]<(total[index]+persons[i])){
+                            total[i]=total[index]+persons[i];
+                        }
+
                     }
                 }
             }
@@ -46,13 +121,60 @@ public class Main {
             //remove index
             visited[index]=true;
             num--;
-
         }
+        out.println(ways[des]+" "+total[des]);
+    }
+    private static void A1002shortestpath(){
+        int[][] pathsMap = {{0,1,1,-1,-1,7},{1,0,-1,3,-1,-1},{1,-1,0,3,5,-1},{-1,3,3,0,-1,2},{-1,-1,5,-1,0,3},{7,-1,-1,2,3,0}};
+        boolean[] visited={false,false,false,false,false,false};
+        int num=6;
+        int[] distances={0,-1,-1,-1,-1,-1};
+        int[] ways={1,0,0,0,0,0};
+        int[] persons={1,2,1,2,1,3};
+        int[] total={1,0,0,0,0,0};
+        while (num>0){
+            int index=0;
+            int temp=0;
+            for (int i = 0; i < visited.length; i++) {
+                if(!visited[i]){
+                    index=i;
+                    temp=distances[i];
+                    break;
+                }
+            }
+            //get smallest
+            for (int j = 0; j < distances.length; j++) {
+                if (!visited[j]&&distances[j]>=0&&distances[j]<temp){
+                    index=j;
+                    temp=distances[j];
+                }
+            }
 
+            //update distances
+            for (int i = 0; i < pathsMap[index].length; i++) {
+                if(pathsMap[index][i]>0&&!visited[i]){
+                    if((distances[index]+pathsMap[index][i])<distances[i]||distances[i]<0){
+                        distances[i]=distances[index]+pathsMap[index][i];
+                        ways[i]=ways[index];
+                        total[i]=total[index]+persons[i];
+                    }else if((distances[index]+pathsMap[index][i])==distances[i]){
+                        ways[i]=ways[i]+1;
+                        if(total[i]<(total[index]+persons[i])){
+                            total[i]=total[index]+persons[i];
+                        }
+
+                    }
+                }
+            }
+
+            //remove index
+            visited[index]=true;
+            num--;
+        }
 
     }
 
-    private static void A1002() {
+    private static void A1002BackUp() {
 
         //test git
         Scanner scan = new Scanner(System.in);
@@ -164,34 +286,6 @@ public class Main {
             return;
         }
         out.println(i);
-    }
-
-    public static int getNextInt() {
-        int next = 0;
-        Scanner scan = new Scanner(System.in);
-        if (scan.hasNextInt()) {
-            next = scan.nextInt();
-        }
-        return next;
-    }
-
-    public static String[] getNextStrings(int num) {
-        int index = 0;
-        String[] strs = new String[num];
-        Scanner scan = new Scanner(System.in);
-        while (scan.hasNext()) {
-            strs[index++] = scan.next();
-        }
-        return strs;
-    }
-
-    public static String getNext() {
-        String next = "";
-        Scanner scan = new Scanner(System.in);
-        if (scan.hasNext()) {
-            next = scan.next();
-        }
-        return next;
     }
 
 
